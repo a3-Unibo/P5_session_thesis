@@ -3,6 +3,7 @@ P5 session sketches for thesis students
 
 ____________________________________________________________________________________________________________________________________
 
+![cover.png](https://github.com/ale2x72/P5_session_thesis/blob/master/cover.png)
 
 #.:. GENERAL NOTES
 
@@ -27,4 +28,3 @@ ________________________________________________________________________________
 #.:. IMPLEMENTATIONS
 
 . coming soon
-
