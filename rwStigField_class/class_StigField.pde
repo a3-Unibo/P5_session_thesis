@@ -2,6 +2,7 @@ class StigField {
   float[][] stig;
   int cols, rows;
   float xRes, yRes;
+  PGraphics pg;
 
   StigField(int cols, int rows, float xRes, float yRes) {
     this.cols = cols;
@@ -10,6 +11,7 @@ class StigField {
     this.yRes = yRes;
     stig = new float[cols][rows];
     initField();
+    pg = createGraphics(cols, rows, JAVA2D);
   }
 
   StigField(PApplet p5) {
@@ -28,7 +30,7 @@ class StigField {
     }
   }
 
-  void evaporate(float t) {
+  void decay(float t) {
     for (int i=0; i< cols; i++) {
       for (int j=0; j< rows; j++) {
         stig[i][j]*=t;
@@ -60,18 +62,18 @@ class StigField {
   }
 
   void display() {
-    PGraphics pg;
     int ind;
     pg = createGraphics(cols, rows, JAVA2D);
+    // pg.clear();
     pg.loadPixels();
     for (int i=0; i< cols; i++) {
       for (int j=0; j< rows; j++) {
         ind = j*cols+i;
-        pg.pixels[ind]=color(stig[i][j]*255);
+        pg.pixels[ind]=color(0,stig[i][j]*255); // if you want to invert it it's (1-stig[i][j])*255
       }
     }
     pg.updatePixels();
     pg.resize(width, height);
-    image(pg, 0, 0);
+    //image(pg, 0, 0);
   }
 }

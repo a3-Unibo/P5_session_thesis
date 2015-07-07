@@ -4,6 +4,7 @@ class Particle {
   Vec3D loc, vel, acc, world;
   float maxSpeed, maxForce;
   float th = 100;
+  float phero = 0.2; // this is the strength of the pheromonic trace
 
   // constructor(s)
   Particle(Vec3D loc, Vec3D vel, Vec3D world) {
@@ -18,31 +19,59 @@ class Particle {
   }
 
 
-  // behaviors
+  // behaviors (uncheck the ones you wish to use)
   void run() {
-    Vec3D s = new Vec3D();
-    if (mousePressed && mouseButton == LEFT) {
-      s = seek(new Vec3D(mouseX, mouseY, 0));
-    }
-    s.scaleSelf(10);
-    addForce(s);
-    // noise field influence
-    Vec3D f = followField(field);
-    f.scaleSelf(0);
-    addForce(f);
+    /*
+    // ................................. mouse influence
+     Vec3D s = new Vec3D();
+     if (mousePressed && mouseButton == LEFT) {
+     s = seek(new Vec3D(mouseX, mouseY, 0));
+     }
+     s.scaleSelf(10);
+     addForce(s);
+     */
 
-    // stigmergic field influence
-    Vec3D st = stigVec(stig, 10, 8, 50);
-    st.scaleSelf(.4);
+    
+    // ................................. noise field influence
+     Vec3D f = followField(noiseField);
+     f.scaleSelf(1);
+     addForce(f);
+     
+
+    // ................................. stigmergic field influence
+
+    //           field, futLoc distance, radius, samples, use steer behavior
+    //              |          |      _____|  ______|      ____|
+    //              \____      |     /    ___/  __________/
+    //                   |     |    |    |     |
+    Vec3D st = stigVec(stig, 10, 10*.8, 200, false);
+    st.scaleSelf(2); // weight stigmergy
+    vel.normalizeTo(maxSpeed*.5); // the trick that does the unstoppable motion
     addForce(st);
 
+    /*
+    // ................................. wander behavior
+     Vec3D w = wander(.2, QUARTER_PI);
+     w.scaleSelf(.1);
+     addForce(w);
+     */
+
+    // ................................. update acc and move
     update();
     move();
+
+    // ................................. border behavior (choose one)
     //bounce();
     wrap();
+
+    // ................................. update stig field
     writeField(stig);
-    display();
+
+    // ................................. display
+    // display();
+    // display moved to the main sketch to toggle agent display in a cleaner way
   }
+
 
   void addForce(Vec3D force) {
     acc.addSelf(force);
@@ -56,7 +85,6 @@ class Particle {
   }
 
   void update() {
-
     vel.addSelf(acc);
     vel.limit(maxSpeed);
     acc = new Vec3D();
@@ -67,76 +95,44 @@ class Particle {
   }
 
   void writeField(StigField stig) {
-    stig.write(loc, 0.08);
+    stig.write(loc, phero);
   }
 
-  Vec3D stigVecAvg(StigField stig, float fut, float rad, int ns) {
-    Vec3D s = new Vec3D();
-    Vec3D sample;
-    int count=0;
-    float st;
-    // calculate future location
-    Vec3D futLoc = new Vec3D(vel).normalizeTo(fut).addSelf(loc);
-    //futLoc = wrapBounds(futLoc);
-    // if futLoc is in bounds....
-    if (checkBounds(futLoc)) {
-      // shoot samples
-      for (int i=0; i< ns; i++) {
-        sample = new Vec3D(random(-rad, rad), random(-rad, rad), 0);
-        // if sample is in bounds....
-        if (checkBounds(futLoc.add(sample))) {
-          // found one!!!
-          count++;
-          // reads field
-          st = stig.read(futLoc.add(sample));
-          // weighs vector according to field value
-          sample.normalizeTo(st);
-          // adds to the global vector
-          s.addSelf(sample);
-        }
-        //sample = wrapBounds(sample);
-      } // end sampling
-      if (count > 0) {
-        s.scaleSelf(1/(float)count); // desired direction
-        s.normalizeTo(maxSpeed); // desired
-        s.subSelf(vel);
-        s.limit(maxForce);
-      }
-    }
-    return s;
-  }
 
-  Vec3D stigVec(StigField stig, float fut, float rad, int ns) {
+  Vec3D stigVec(StigField stig, float fut, float rad, int ns, boolean steer) {
     Vec3D s = new Vec3D();
+    float st=0, sampleSt;
     Vec3D sample;
-    int count=0;
-    float st;
+
     // calculate future location
     Vec3D futLoc = new Vec3D(vel).normalizeTo(fut).addSelf(loc);
 
     // shoot samples
     for (int i=0; i< ns; i++) {
       sample = new Vec3D(random(-rad, rad), random(-rad, rad), 0);
-
-      // found one!!!
-      count++;
       // reads field
-      st = stig.read(futLoc.add(sample));
-      // weighs vector according to field value
-      sample.normalizeTo(st);
-      // adds to the global vector
-      s.addSelf(sample);
-
-      //sample = wrapBounds(sample);
+      sampleSt = stig.read(futLoc.add(sample));
+      if (sampleSt > st) {
+        st = sampleSt;
+        s = sample;
+      }
     } // end sampling
-    if (count > 0) {
-      s.scaleSelf(1/(float)count); // desired direction
-      s.normalizeTo(maxSpeed); // desired
-      s.subSelf(vel);
-      s.limit(maxForce);
-    }
 
+    if (steer) {
+      s.normalizeTo(maxSpeed); //  <- desired
+      s.subSelf(vel);
+      s.normalizeTo(maxForce);
+    } else {
+      s.normalizeTo(maxSpeed*.1); // 0.3 as default value
+    }
     return s;
+  }
+
+  Vec3D wander(float amount, float ang) {
+    Vec3D wand = new Vec3D(vel);
+    wand.normalizeTo(amount);
+    wand.rotateZ(random(-ang, ang));
+    return wand;
   }
 
   Vec3D seek(Vec3D target) {
@@ -196,7 +192,7 @@ class Particle {
   }
 
   void display() {
-    stroke(200, 180);
+    stroke(200, 0, 0, 180);
     strokeWeight(2);
     point(loc.x, loc.y, loc.z);
   }
