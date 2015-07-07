@@ -2,6 +2,7 @@ class Field {
   Vec3D[][] field;
   int cols, rows;
   float xRes, yRes, noiseScale;
+  PGraphics pg;
 
   Field(float xRes, float yRes, float noiseScale) {
     this.xRes = xRes;
@@ -13,6 +14,7 @@ class Field {
 
     field = new Vec3D[cols][rows];
     initField();
+    pg = createGraphics(width, height, JAVA2D);
   }
 
 
@@ -69,20 +71,23 @@ class Field {
   }
   
   void displayColor(float len) {
-    pushStyle();
-    stroke(0,80);
-    strokeWeight(1);
+    pg.clear();
+    pg.beginDraw();
+    pg.pushStyle();
+    pg.stroke(0,80);
+    pg.strokeWeight(1);
     float ang;
     for (int i=0; i< cols; i++) {
       for (int j=0; j<rows; j++) {
-        pushMatrix();
-        translate(xRes*(i+.5), yRes*(j+.5));
+        pg.pushMatrix();
+        pg.translate(xRes*(i+.5), yRes*(j+.5));
         ang = map(atan2(field[i][j].y, field[i][j].x), 0, TWO_PI,0.0,1.0);
-        stroke(lerpColor(color(#E81A1A,80),color(#0D670C,80), ang));
-        line(0, 0, field[i][j].x*len, field[i][j].y*len);
-        popMatrix();
+        pg.stroke(lerpColor(color(#E81A1A,80),color(#0D670C,80), ang));
+        pg.line(0, 0, field[i][j].x*len, field[i][j].y*len);
+        pg.popMatrix();
       }
     }
-    popStyle();
+    pg.popStyle();
+    pg.endDraw();
   }
 }

@@ -63,8 +63,9 @@ class StigField {
 
   void display() {
     int ind;
-    pg = createGraphics(cols, rows, JAVA2D);
-    // pg.clear();
+    //pg = createGraphics(cols, rows, JAVA2D);
+     pg.clear();
+    pg.beginDraw();
     pg.loadPixels();
     for (int i=0; i< cols; i++) {
       for (int j=0; j< rows; j++) {
@@ -73,6 +74,7 @@ class StigField {
       }
     }
     pg.updatePixels();
+    pg.endDraw();
     pg.resize(width, height);
     //image(pg, 0, 0);
   }

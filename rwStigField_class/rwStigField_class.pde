@@ -14,6 +14,8 @@ float sDec = .99; // stigmergy decay factor
 
 int nParts = 5000; // our particles/agents
 
+float updateFreq = 3; // display update frequency
+
 void setup() {
   if (sketchFullScreen()) { // using sketchFullScreen to decide between 2 options
     // when fullScreen, use all of the display real estate
@@ -21,8 +23,8 @@ void setup() {
     smooth();
   } else {
     // else, use a smaller window
-    size(displayWidth-20, displayHeight-50, P3D);
-    //size(800,600,P3D); // smaller display
+    //size(displayWidth-20, displayHeight-50, P3D);
+    size(800, 600, P3D); // smaller display
     smooth(8);
   }
 
@@ -37,7 +39,7 @@ void setup() {
   }
 
   // initialize fields
-  
+
   noiseField = new Field(5, 5, 0.02);
   stig = new StigField(this);
 }
@@ -48,13 +50,16 @@ void draw() {
 
   // stigmergic field first
   if (stigDisp) {
-    stig.display();
+    if (frameCount%updateFreq==0) stig.display();
     image(stig.pg, 0, 0);
   }
 
   // noise field then
   if (noiseUp) noiseField.updateField(frameCount*0.005);
-  if (noiseDisp) noiseField.displayColor(30);
+  if (noiseDisp) {
+    if (noiseUp && frameCount%updateFreq==0) noiseField.displayColor(30); // updates display only if it updates data
+    image(noiseField.pg, 0, 0);
+  }
 
   // particle display
   for (Particle p : parts) {
@@ -68,7 +73,7 @@ void draw() {
 
 
 boolean sketchFullScreen() {
-  return true;
+  return false;
 }
 
 void keyPressed() {
