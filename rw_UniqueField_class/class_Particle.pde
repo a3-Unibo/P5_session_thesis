@@ -77,7 +77,7 @@ class Particle {
     acc.addSelf(force);
   }
 
-  Vec3D followField(Field field) {
+  Vec3D followField(NoiseField field) {
     Vec3D f = field.eval(loc);
     f.subSelf(vel);
     f.limit(maxForce);
