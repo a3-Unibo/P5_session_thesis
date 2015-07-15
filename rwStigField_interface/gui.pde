@@ -54,10 +54,26 @@ void initGUI(ControlP5 c5) {
         . setColorCaptionLabel(color(255))
           .setGroup(g1);     
 
+  c5.addButton("reset")
+    .setPosition(70, 90)
+      .setSize(50, 20)
+        . setColorCaptionLabel(color(255))
+          .setGroup(g1); 
+
+  c5.addToggle("go")
+    .setPosition(130, 90)
+      .setSize(50, 20)
+        . setColorCaptionLabel(color(0))
+          .setGroup(g1);         
+
   c5.setAutoDraw(false); // lets me choose when drawing the interface
 }
 
 void image(int theValue) {
   saveImage();
   println("image saved from button", theValue);
+}
+
+void reset(int theValue) {
+  reset();
 }
