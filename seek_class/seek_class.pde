@@ -1,7 +1,12 @@
 import toxi.geom.*;
+
+
 Vec3D world;
 ArrayList <Particle> parts;
 Particle p;
+
+boolean slow = true;
+boolean dispTail = false;
 
 int nParts = 5000;
 
@@ -22,10 +27,16 @@ void draw() {
   for (Particle p : parts) {
     p.run();
   }
-  
+
   p = parts.get(0);
   noStroke();
-  fill(0,50);
-  ellipse(mouseX, mouseY, p.th*2,p.th*2);
+  fill(0, 30);
+  ellipse(mouseX, mouseY, p.sd*2, p.sd*2);
+  if (slow) ellipse(mouseX, mouseY, p.th*2, p.th*2);
   // DRY - Do not Repeat Yourself
+}
+
+void keyPressed() {
+  if (key=='s') slow = !slow;
+  if (key=='t') dispTail = !dispTail;
 }

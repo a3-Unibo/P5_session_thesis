@@ -47,7 +47,7 @@ void draw() {
    */
   // DRY - Do not Repeat Yourself
   
-  if (frameCount%5==0) evaporate(pg );
+  if (frameCount%5==0) evaporate(pg);
 }
 
 void evaporate(PGraphics pg) {
