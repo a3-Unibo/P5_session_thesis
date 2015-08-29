@@ -32,33 +32,33 @@ class Particle {
      */
 
 
-      // ................................. noise field influence
-      Vec3D f = followField(noiseField);
-      f.scaleSelf(1); // weigh noise influence
-      addForce(f);
+    // ................................. noise field influence
+    Vec3D f = followField(noiseField);
+    f.scaleSelf(1); // weigh noise influence
+    addForce(f);
 
 
-      // ................................. stigmergic field influence
+    // ................................. stigmergic field influence
 
-      //           field, futLoc distance, radius, samples, use steer behavior
-      //              |          |      _____|  ______|      ____|
-      //              \____      |     /    ___/  __________/
-      //                   |     |    |    |     |
-      Vec3D st = stigVec(stig, 10, 10*.8, 200, steer);
-      st.scaleSelf(2); // weigh stigmergy influence
-      vel.normalizeTo(maxSpeed*.5); // the trick that does the unstoppable motion
-      /*
+    //           field, futLoc distance, radius, samples, use steer behavior
+    //              |          |      _____|  ______|      ____|
+    //              \____      |     /    ___/  __________/
+    //                   |     |    |    |     |
+    Vec3D st = stigVec(stig, 10, 10*.8, 200, steer);
+    st.scaleSelf(2); // weigh stigmergy influence
+    vel.normalizeTo(maxSpeed*.5); // the trick that does the unstoppable motion
+    /*
     normalizing speed avoids speed to go below a certain value and cause the particle/agent
-       to eventually stop.
-       */
-      addForce(st);
+     to eventually stop.
+     */
+    addForce(st);
 
-      /*
+    /*
     // ................................. wander behavior
-       Vec3D w = wander(.2, QUARTER_PI);
-       w.scaleSelf(.1);
-       addForce(w);
-       */
+     Vec3D w = wander(.2, QUARTER_PI);
+     w.scaleSelf(.1);
+     addForce(w);
+     */
 
     // ................................. update acc and move
     update();
