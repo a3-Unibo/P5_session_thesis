@@ -98,7 +98,7 @@ class Particle {
 
   void display() {
     stroke(0);
-    strokeWeight(3);
+    strokeWeight(2);
     point(loc.x, loc.y, loc.z);
   }
 }

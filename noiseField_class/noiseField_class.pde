@@ -8,7 +8,8 @@ Field field;
 int nParts = 10000;
 
 void setup() {
-  size(displayWidth-20, displayHeight-50, P3D);
+  // size(displayWidth-20, displayHeight-50, P3D); // not admitted since Processing 3
+  size(1200,800, P3D);
   world = new Vec3D(width, height, 0);
   parts = new ArrayList<Particle>();
   
@@ -18,7 +19,7 @@ void setup() {
     parts.add(p);
   }
   
-  field = new Field(50,50,0.02);
+  field = new Field(10,10,0.02);
   
 }
 
@@ -29,7 +30,7 @@ void draw() {
    p.run();
   }
   field.updateField(frameCount*0.005);
-  field.displayColor(30);
+  field.displayColor(20);
   
   /*
   p = parts.get(0);
@@ -40,6 +41,8 @@ void draw() {
   // DRY - Do not Repeat Yourself
 }
 
+/*
 boolean sketchFullScreen(){
 return true;
 }
+*/
