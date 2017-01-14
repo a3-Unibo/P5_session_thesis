@@ -17,16 +17,11 @@ int nParts = 1000; // number of our particles/agents
 float updateFreq = 3; // display update frequency
 
 void setup() {
-  if (sketchFullScreen()) { // using sketchFullScreen to decide between 2 options
-    // when fullScreen, use all of the display real estate
-    size(displayWidth, displayHeight, P3D);
-    smooth();
-  } else {
-    // else, use a smaller window
-    //size(displayWidth-20, displayHeight-50, P3D);
-    size(800, 600, P3D); // smaller display
-    smooth(8);
-  }
+
+  size(800, 600, P3D); // smaller display
+  surface.setSize(displayWidth-20, displayHeight-50);
+  //fullScreen(P3D);
+  smooth(8);
 
   // initialize world and particles
   world = new Vec3D(width, height, 0);
@@ -34,7 +29,7 @@ void setup() {
 
   for (int i=0; i< nParts; i++) {
     Particle p = new Particle( new Vec3D(random(width), random(height), 0), 
-    new Vec3D(random(-2, 2), random(-2, 2), 0), world);
+      new Vec3D(random(-2, 2), random(-2, 2), 0), world);
     parts.add(p);
   }
 
@@ -71,10 +66,6 @@ void draw() {
   stig.decay(.99);
 }
 
-// to make sketch full screen, make this function return true
-boolean sketchFullScreen() {
-  return false;
-}
 
 void keyPressed() {
   if (key=='a') agDisp = ! agDisp; // toggels agents/particles display
@@ -84,7 +75,7 @@ void keyPressed() {
   if (key=='i') {
     // create a PGraphics to save a transparent background
     //  png from stigmergic and/or noise field 
-    PGraphics img = createGraphics(width, height, JAVA2D);
+    PGraphics img = createGraphics(width, height, P2D);
     img.beginDraw();
     if (stigDisp) img.image(stig.pg, 0, 0);
     if (noiseDisp) img.image(noiseField.pg, 0, 0);

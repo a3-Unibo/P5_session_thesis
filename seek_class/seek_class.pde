@@ -11,7 +11,8 @@ boolean dispTail = false;
 int nParts = 5000;
 
 void setup() {
-  size(displayWidth-20, displayHeight-50, P3D);
+  size(800,600, P3D);
+  surface.setSize(displayWidth-20, displayHeight-50);
   world = new Vec3D(width, height, 0);
   parts = new ArrayList<Particle>();
   for (int i=0; i< nParts; i++) {

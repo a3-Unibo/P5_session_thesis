@@ -17,7 +17,7 @@ Ball[] bArr = new Ball[nBalls]; // dichiarazione + instanziazione array
 
 void setup() {
   // size(100,100);
-  size(800, 600); // width, height
+  size(800, 800); // width, height
   p=300;
   v=1;
   a=0.1;
@@ -43,6 +43,6 @@ void draw() {
     //bArr[i].semiDrunk();
     bArr[i].update();
     bArr[i].display();
-    println(bArr[i].loc);
+    //println(bArr[i].loc);
   }
 } // end draw

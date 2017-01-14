@@ -10,6 +10,7 @@ int nParts = 10000;
 void setup() {
   // size(displayWidth-20, displayHeight-50, P3D); // not admitted since Processing 3
   size(1200,800, P3D);
+  surface.setSize(displayWidth-20, displayHeight-50);
   world = new Vec3D(width, height, 0);
   parts = new ArrayList<Particle>();
   
