@@ -11,7 +11,7 @@ class StigField {
     this.yRes = yRes;
     stig = new float[cols][rows];
     initField();
-    pg = createGraphics(cols, rows, JAVA2D);
+    pg = createGraphics(cols, rows, P2D);
   }
 
   StigField(PApplet p5) {
@@ -63,8 +63,8 @@ class StigField {
 
   void display() {
     int ind;
-    pg.clear();
     pg.beginDraw();
+    pg.clear();
     pg.loadPixels();
     for (int i=0; i< cols; i++) {
       for (int j=0; j< rows; j++) {

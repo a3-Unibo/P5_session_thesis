@@ -14,7 +14,7 @@ class Field {
 
     field = new Vec3D[cols][rows];
     initField();
-    pg = createGraphics(width, height, JAVA2D);
+    pg = createGraphics(width, height, P2D);
     displayColor(30);
   }
 
@@ -72,8 +72,9 @@ class Field {
   }
   
   void displayColor(float len) {
-    pg.clear();
+    
     pg.beginDraw();
+    pg.clear();
     pg.pushStyle();
     pg.stroke(0,80);
     pg.strokeWeight(1);

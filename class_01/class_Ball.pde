@@ -19,7 +19,7 @@ class Ball {
     life =1;
     lifeRate = 1/nFrames;
   }
-
+  
   // methods or behaviors
 
     void update() {
